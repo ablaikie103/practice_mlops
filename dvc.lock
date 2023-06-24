@@ -1,0 +1,94 @@
+schema: '2.0'
+stages:
+  load_data:
+    cmd: python src/scripts/data_load.py --config config.yaml
+    deps:
+    - path: config.yaml
+      hash: md5
+      md5: eff6a24e982e8d5c9c56143670364db7
+      size: 510
+    outs:
+    - path: data/raw/diabetes.csv
+      hash: md5
+      md5: fee81055c09eadc97db03d1f5e70928a
+      size: 95136
+  clean_data:
+    cmd: python src/scripts/data_clean.py --config config.yaml
+    deps:
+    - path: config.yaml
+      hash: md5
+      md5: eff6a24e982e8d5c9c56143670364db7
+      size: 510
+    - path: data/raw/diabetes.csv
+      hash: md5
+      md5: fee81055c09eadc97db03d1f5e70928a
+      size: 95136
+    outs:
+    - path: data/processed/X_test.csv
+      hash: md5
+      md5: 538211f1158129019906e3c4717cba7e
+      size: 17346
+    - path: data/processed/X_train.csv
+      hash: md5
+      md5: 6ecd5c7e841956fc0375b74f341797af
+      size: 68634
+    - path: data/processed/y_test.csv
+      hash: md5
+      md5: 8dd499c196b8b56f018666789ad1b3d3
+      size: 507
+    - path: data/processed/y_train.csv
+      hash: md5
+      md5: a0e099610c4b97102c49120cd11a6815
+      size: 2012
+  train_model:
+    cmd: python src/scripts/train.py --config config.yaml
+    deps:
+    - path: config.yaml
+      hash: md5
+      md5: eff6a24e982e8d5c9c56143670364db7
+      size: 510
+    - path: data/processed/X_train.csv
+      hash: md5
+      md5: 6ecd5c7e841956fc0375b74f341797af
+      size: 68634
+    - path: data/processed/y_train.csv
+      hash: md5
+      md5: a0e099610c4b97102c49120cd11a6815
+      size: 2012
+    outs:
+    - path: models/rf_model.pkl
+      hash: md5
+      md5: 8536b1e5b04d18a551f35539e79078e6
+      size: 390414
+  evaluate_model:
+    cmd: python src/scripts/evaluate.py --config config.yaml
+    deps:
+    - path: config.yaml
+      hash: md5
+      md5: eff6a24e982e8d5c9c56143670364db7
+      size: 510
+    - path: data/processed/X_test.csv
+      hash: md5
+      md5: 538211f1158129019906e3c4717cba7e
+      size: 17346
+    - path: data/processed/y_test.csv
+      hash: md5
+      md5: 8dd499c196b8b56f018666789ad1b3d3
+      size: 507
+    - path: models/rf_model.pkl
+      hash: md5
+      md5: 8536b1e5b04d18a551f35539e79078e6
+      size: 390414
+    outs:
+    - path: results/evaluation_metrics.yaml
+      hash: md5
+      md5: 0a9c7384ab90545df5713836f6939560
+      size: 21
+    - path: results/line_plot.png
+      hash: md5
+      md5: 9915a2177df9fccece8beaf0549ad07f
+      size: 73615
+    - path: results/scatter_plot.png
+      hash: md5
+      md5: 5454bf7d3bbc8a061c8a30d492adaa27
+      size: 20007
