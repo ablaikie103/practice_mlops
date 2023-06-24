@@ -1,0 +1,56 @@
+artifacts:
+  data:
+    hash: 8536b1e5b04d18a551f35539e79078e6
+    size: 390414
+    uri: rf_model.pkl
+call_orders:
+  predict:
+  - - model
+    - predict
+object_type: model
+processors:
+  model:
+    methods:
+      predict:
+        args:
+        - name: X
+          type_:
+            columns:
+            - age
+            - sex
+            - bmi
+            - bp
+            - s1
+            - s2
+            - s3
+            - s4
+            - s5
+            - s6
+            dtypes:
+            - float64
+            - float64
+            - float64
+            - float64
+            - float64
+            - float64
+            - float64
+            - float64
+            - float64
+            - float64
+            index_cols: []
+            type: dataframe
+        name: predict
+        returns:
+          dtype: float64
+          shape:
+          - null
+          type: ndarray
+    type: sklearn
+requirements:
+- module: sklearn
+  package_name: scikit-learn
+  version: 1.2.2
+- module: pandas
+  version: 2.0.2
+- module: numpy
+  version: 1.25.0
