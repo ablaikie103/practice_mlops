@@ -1,7 +1,7 @@
 artifacts:
   data:
-    hash: 8536b1e5b04d18a551f35539e79078e6
-    size: 390414
+    hash: 0afb34152ec50779dddc5fe5b4b353bf
+    size: 28068879
     uri: rf_model.pkl
 call_orders:
   predict:

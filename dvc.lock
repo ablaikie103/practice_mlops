@@ -1,28 +1,37 @@
 schema: '2.0'
 stages:
   load_data:
-    cmd: python src/scripts/data_load.py --config config.yaml
-    deps:
-    - path: config.yaml
-      hash: md5
-      md5: eff6a24e982e8d5c9c56143670364db7
-      size: 510
+    cmd: python src/scripts/data_load.py --config params.yaml
+    params:
+      params.yaml:
+        base:
+          random_state: 42
+          log_file: mylog.log
+        data_load:
+          dataset_csv: data/raw/diabetes.csv
     outs:
     - path: data/raw/diabetes.csv
       hash: md5
       md5: fee81055c09eadc97db03d1f5e70928a
       size: 95136
   clean_data:
-    cmd: python src/scripts/data_clean.py --config config.yaml
+    cmd: python src/scripts/data_clean.py --config params.yaml
     deps:
-    - path: config.yaml
-      hash: md5
-      md5: eff6a24e982e8d5c9c56143670364db7
-      size: 510
     - path: data/raw/diabetes.csv
       hash: md5
       md5: fee81055c09eadc97db03d1f5e70928a
       size: 95136
+    params:
+      params.yaml:
+        base:
+          random_state: 42
+          log_file: mylog.log
+        data_clean:
+          test_size: 0.2
+          X_train: data/processed/X_train.csv
+          y_train: data/processed/y_train.csv
+          X_test: data/processed/X_test.csv
+          y_test: data/processed/y_test.csv
     outs:
     - path: data/processed/X_test.csv
       hash: md5
@@ -41,12 +50,8 @@ stages:
       md5: a0e099610c4b97102c49120cd11a6815
       size: 2012
   train_model:
-    cmd: python src/scripts/train.py --config config.yaml
+    cmd: python src/scripts/train.py --config params.yaml
     deps:
-    - path: config.yaml
-      hash: md5
-      md5: eff6a24e982e8d5c9c56143670364db7
-      size: 510
     - path: data/processed/X_train.csv
       hash: md5
       md5: 6ecd5c7e841956fc0375b74f341797af
@@ -55,18 +60,18 @@ stages:
       hash: md5
       md5: a0e099610c4b97102c49120cd11a6815
       size: 2012
+    params:
+      params.yaml:
+        train.max_depth: 20
+        train.n_estimators: 1000
     outs:
     - path: models/rf_model.pkl
       hash: md5
-      md5: 8536b1e5b04d18a551f35539e79078e6
-      size: 390414
+      md5: 0afb34152ec50779dddc5fe5b4b353bf
+      size: 28068879
   evaluate_model:
-    cmd: python src/scripts/evaluate.py --config config.yaml
+    cmd: python src/scripts/evaluate.py --config params.yaml
     deps:
-    - path: config.yaml
-      hash: md5
-      md5: eff6a24e982e8d5c9c56143670364db7
-      size: 510
     - path: data/processed/X_test.csv
       hash: md5
       md5: 538211f1158129019906e3c4717cba7e
@@ -77,18 +82,24 @@ stages:
       size: 507
     - path: models/rf_model.pkl
       hash: md5
-      md5: 8536b1e5b04d18a551f35539e79078e6
-      size: 390414
+      md5: 0afb34152ec50779dddc5fe5b4b353bf
+      size: 28068879
+    params:
+      params.yaml:
+        evaluate:
+          metrics_file: results/evaluation_metrics.yaml
+          scatter_plot_file: results/scatter_plot.png
+          line_plot_file: results/line_plot.png
     outs:
     - path: results/evaluation_metrics.yaml
       hash: md5
-      md5: 0a9c7384ab90545df5713836f6939560
+      md5: 5f032c68b66576fc9b145112b552ee01
       size: 21
     - path: results/line_plot.png
       hash: md5
-      md5: 9915a2177df9fccece8beaf0549ad07f
-      size: 73615
+      md5: 12d9cf633db841bf33cd493f61ce4528
+      size: 74437
     - path: results/scatter_plot.png
       hash: md5
-      md5: 5454bf7d3bbc8a061c8a30d492adaa27
-      size: 20007
+      md5: ce445efe2a77fa738b42cbbe61d04730
+      size: 20359

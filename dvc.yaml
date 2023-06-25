@@ -1,16 +1,13 @@
 stages:
 
   load_data:
-    cmd: python src/scripts/data_load.py --config config.yaml
-    deps:
-      - config.yaml
+    cmd: python src/scripts/data_load.py --config params.yaml
     outs:
       - data/raw/diabetes.csv
 
   clean_data:
-    cmd: python src/scripts/data_clean.py --config config.yaml
+    cmd: python src/scripts/data_clean.py --config params.yaml
     deps:
-      - config.yaml
       - data/raw/diabetes.csv
     outs:
       - data/processed/X_train.csv
@@ -19,23 +16,27 @@ stages:
       - data/processed/y_test.csv
 
   train_model:
-    cmd: python src/scripts/train.py --config config.yaml
+    cmd: python src/scripts/train.py --config params.yaml
     deps:
-      - config.yaml
       - data/processed/X_train.csv
       - data/processed/y_train.csv
+    params:
+      - train.n_estimators
+      - train.max_depth
     outs:
       - models/rf_model.pkl
 
   evaluate_model:
-    cmd: python src/scripts/evaluate.py --config config.yaml
+    cmd: python src/scripts/evaluate.py --config params.yaml
     deps:
-      - config.yaml
       - models/rf_model.pkl
       - data/processed/X_test.csv
       - data/processed/y_test.csv
     metrics:
-      - results/evaluation_metrics.yaml
+      - results/evaluation_metrics.yaml:
+          cache: false
     outs:
-      - results/line_plot.png
-      - results/scatter_plot.png
+      - results/line_plot.png:
+          cache: false
+      - results/scatter_plot.png:
+          cache: false
