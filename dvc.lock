@@ -1,37 +1,19 @@
 schema: '2.0'
 stages:
   load_data:
-    cmd: python src/scripts/data_load.py --config params.yaml
-    params:
-      params.yaml:
-        base:
-          random_state: 42
-          log_file: mylog.log
-        data_load:
-          dataset_csv: data/raw/diabetes.csv
+    cmd: python src/scripts/data_load.py --config configs.yaml
     outs:
     - path: data/raw/diabetes.csv
       hash: md5
       md5: fee81055c09eadc97db03d1f5e70928a
       size: 95136
   clean_data:
-    cmd: python src/scripts/data_clean.py --config params.yaml
+    cmd: python src/scripts/data_clean.py --config configs.yaml
     deps:
     - path: data/raw/diabetes.csv
       hash: md5
       md5: fee81055c09eadc97db03d1f5e70928a
       size: 95136
-    params:
-      params.yaml:
-        base:
-          random_state: 42
-          log_file: mylog.log
-        data_clean:
-          test_size: 0.2
-          X_train: data/processed/X_train.csv
-          y_train: data/processed/y_train.csv
-          X_test: data/processed/X_test.csv
-          y_test: data/processed/y_test.csv
     outs:
     - path: data/processed/X_test.csv
       hash: md5
@@ -50,7 +32,7 @@ stages:
       md5: a0e099610c4b97102c49120cd11a6815
       size: 2012
   train_model:
-    cmd: python src/scripts/train.py --config params.yaml
+    cmd: python src/scripts/train.py --config configs.yaml --params params.yaml
     deps:
     - path: data/processed/X_train.csv
       hash: md5
@@ -62,15 +44,15 @@ stages:
       size: 2012
     params:
       params.yaml:
-        train.max_depth: 20
-        train.n_estimators: 1000
+        train.max_depth: 10
+        train.n_estimators: 100
     outs:
     - path: models/rf_model.pkl
       hash: md5
-      md5: 0afb34152ec50779dddc5fe5b4b353bf
-      size: 28068879
+      md5: d5105061b35a4f9b88d4d99b4523f867
+      size: 2058362
   evaluate_model:
-    cmd: python src/scripts/evaluate.py --config params.yaml
+    cmd: python src/scripts/evaluate.py --config configs.yaml
     deps:
     - path: data/processed/X_test.csv
       hash: md5
@@ -82,24 +64,18 @@ stages:
       size: 507
     - path: models/rf_model.pkl
       hash: md5
-      md5: 0afb34152ec50779dddc5fe5b4b353bf
-      size: 28068879
-    params:
-      params.yaml:
-        evaluate:
-          metrics_file: results/evaluation_metrics.yaml
-          scatter_plot_file: results/scatter_plot.png
-          line_plot_file: results/line_plot.png
+      md5: d5105061b35a4f9b88d4d99b4523f867
+      size: 2058362
     outs:
     - path: results/evaluation_metrics.yaml
       hash: md5
-      md5: 5f032c68b66576fc9b145112b552ee01
+      md5: e93d744e215edccd3b0e9056f5377999
       size: 21
     - path: results/line_plot.png
       hash: md5
-      md5: 12d9cf633db841bf33cd493f61ce4528
-      size: 74437
+      md5: c0f1fd0911e84aac83b8f7bdf29e123e
+      size: 74257
     - path: results/scatter_plot.png
       hash: md5
-      md5: ce445efe2a77fa738b42cbbe61d04730
-      size: 20359
+      md5: caf333c6a9fdabef51982b033cd24213
+      size: 20573

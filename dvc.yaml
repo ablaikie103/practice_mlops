@@ -1,12 +1,12 @@
 stages:
 
   load_data:
-    cmd: python src/scripts/data_load.py --config params.yaml
+    cmd: python src/scripts/data_load.py --config configs.yaml
     outs:
       - data/raw/diabetes.csv
 
   clean_data:
-    cmd: python src/scripts/data_clean.py --config params.yaml
+    cmd: python src/scripts/data_clean.py --config configs.yaml
     deps:
       - data/raw/diabetes.csv
     outs:
@@ -16,7 +16,7 @@ stages:
       - data/processed/y_test.csv
 
   train_model:
-    cmd: python src/scripts/train.py --config params.yaml
+    cmd: python src/scripts/train.py --config configs.yaml --params params.yaml
     deps:
       - data/processed/X_train.csv
       - data/processed/y_train.csv
@@ -27,7 +27,7 @@ stages:
       - models/rf_model.pkl
 
   evaluate_model:
-    cmd: python src/scripts/evaluate.py --config params.yaml
+    cmd: python src/scripts/evaluate.py --config configs.yaml
     deps:
       - models/rf_model.pkl
       - data/processed/X_test.csv

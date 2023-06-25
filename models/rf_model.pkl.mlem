@@ -1,7 +1,7 @@
 artifacts:
   data:
-    hash: 0afb34152ec50779dddc5fe5b4b353bf
-    size: 28068879
+    hash: d5105061b35a4f9b88d4d99b4523f867
+    size: 2058362
     uri: rf_model.pkl
 call_orders:
   predict:
@@ -50,7 +50,7 @@ requirements:
 - module: sklearn
   package_name: scikit-learn
   version: 1.2.2
-- module: pandas
-  version: 2.0.2
 - module: numpy
   version: 1.25.0
+- module: pandas
+  version: 2.0.2
