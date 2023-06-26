@@ -2,6 +2,11 @@ schema: '2.0'
 stages:
   load_data:
     cmd: python src/scripts/data_load.py --config configs.yaml
+    deps:
+    - path: src/scripts/data_load.py
+      hash: md5
+      md5: 45488cef645b600001f1c94a30bdaad8
+      size: 841
     outs:
     - path: data/raw/diabetes.csv
       hash: md5
@@ -14,6 +19,10 @@ stages:
       hash: md5
       md5: fee81055c09eadc97db03d1f5e70928a
       size: 95136
+    - path: src/scripts/data_clean.py
+      hash: md5
+      md5: ac6be70ebe8eb11a66a6b5e6a9a53f9b
+      size: 1404
     outs:
     - path: data/processed/X_test.csv
       hash: md5
@@ -42,6 +51,10 @@ stages:
       hash: md5
       md5: a0e099610c4b97102c49120cd11a6815
       size: 2012
+    - path: src/scripts/train.py
+      hash: md5
+      md5: 1c81491e1f3b8cdb5f98a423d8763308
+      size: 1448
     params:
       params.yaml:
         train.max_depth: 10
@@ -49,8 +62,8 @@ stages:
     outs:
     - path: models/rf_model.pkl
       hash: md5
-      md5: d5105061b35a4f9b88d4d99b4523f867
-      size: 2058362
+      md5: fa89e04c9692031e50ddf44f7a3fc544
+      size: 703
   evaluate_model:
     cmd: python src/scripts/evaluate.py --config configs.yaml
     deps:
@@ -64,18 +77,22 @@ stages:
       size: 507
     - path: models/rf_model.pkl
       hash: md5
-      md5: d5105061b35a4f9b88d4d99b4523f867
-      size: 2058362
+      md5: fa89e04c9692031e50ddf44f7a3fc544
+      size: 703
+    - path: src/scripts/evaluate.py
+      hash: md5
+      md5: 0026175d476ade3c53e5bc111be2dba7
+      size: 1725
     outs:
     - path: results/evaluation_metrics.yaml
       hash: md5
-      md5: e93d744e215edccd3b0e9056f5377999
+      md5: fb64c64555fdaf250883ec842acb6398
       size: 21
     - path: results/line_plot.png
       hash: md5
-      md5: c0f1fd0911e84aac83b8f7bdf29e123e
-      size: 74257
+      md5: 3add2dc352b1c711ba778dbdb0c81d1d
+      size: 74717
     - path: results/scatter_plot.png
       hash: md5
-      md5: caf333c6a9fdabef51982b033cd24213
-      size: 20573
+      md5: 0d3d8b1725b3f9ca89a3e4879fd51ec3
+      size: 18749
