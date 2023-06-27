@@ -27,7 +27,7 @@ jobs:
         ls -l
     - name: Test with pytest
       run: |
-        pytest
+        python -m pytest
     - name: Python Black
       run: |
         black . --check

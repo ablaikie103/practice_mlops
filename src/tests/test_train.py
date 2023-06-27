@@ -6,8 +6,9 @@ import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 from mlem.api import load
-from utils.logs import MyLogger
-from scripts.train import train_diabetes_model
+import sys
+
+from src.scripts.train import train_diabetes_model
 
 
 @pytest.fixture
